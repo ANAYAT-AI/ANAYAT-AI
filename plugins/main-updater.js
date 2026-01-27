@@ -12,7 +12,7 @@ cmd({
 async (conn, mek, m, { from, reply, isCreator }) => {
     try {
         if (!isCreator) {
-            return reply("> *📛 𝚃𝙷𝙸𝚂 𝙸𝚂 𝙰𝙽 𝙾𝚆𝙽𝙴𝚁 𝙾𝙽𝙻𝚈 𝙲𝙾𝙼𝙼𝙰𝙽𝙳?!*");
+            return reply("> *📛 𝙾𝙽𝙻𝚈 𝚃𝙷𝙴 𝙱𝙾𝚃 𝙾𝚆𝙽𝙴𝚁 𝙲𝙰𝙽 𝚄𝚂𝙴 𝚃𝙷𝙸𝚂 𝙲𝙾𝙼𝙼𝙰𝙽𝙳?*");
         }
 
         // Initial message
