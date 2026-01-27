@@ -12,7 +12,7 @@ cmd({
 async (conn, mek, m, { from, reply, isCreator }) => {
     try {
         if (!isCreator) {
-            return reply("*📛 тнιs ιs αη σωηεя-σηℓ�? cσммαη�?!*");
+            return reply("> *📛 𝚃𝙷𝙸𝚂 𝙸𝚂 𝙰𝙽 𝙾𝚆𝙽𝙴𝚁 𝙾𝙽𝙻𝚈 𝙲𝙾𝙼𝙼𝙰𝙽𝙳?!*");
         }
 
         // Initial message
