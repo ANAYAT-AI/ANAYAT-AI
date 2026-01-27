@@ -367,7 +367,7 @@ const audioPath = path.join(__dirname, '../assets/menu.m4a');
 await conn.sendMessage(from, {
     audio: fs.readFileSync(audioPath),
     mimetype: 'audio/mp4',
-    ptt: true,
+    ptt: false,
 }, { quoted: mek });
         
     } catch (e) {
