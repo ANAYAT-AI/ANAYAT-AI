@@ -1,77 +1,135 @@
 const { cmd } = require('../command');
 const yts = require('yt-search');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 cmd({
     pattern: "play",
     alias: ["song", "audio"],
     react: "🎵",
-    desc: "YouTube search & MP3 play",
+    desc: "Play song with 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸 style (FFmpeg fixed)",
     category: "download",
     use: ".play <song name>",
     filename: __filename
 }, async (conn, mek, m, { from, args, reply }) => {
     try {
         const query = args.join(" ");
-        if (!query) return reply("❌ Bhai song name likho");
+        if (!query) {
+            return reply(
+                "❌ *Song name likho*\n\nExample:\n.play pal pal"
+            );
+        }
 
-        await conn.sendMessage(from, { react: { text: "⏳", key: m.key } });
+        // ⏳ react
+        await conn.sendMessage(from, {
+            react: { text: "⏳", key: m.key }
+        });
 
         // 🔍 YouTube search
         const search = await yts(query);
         if (!search.videos || !search.videos.length) {
-            return reply("❌ Koi result nahi mila");
+            return reply("❌ *Song nahi mila*");
         }
 
         const video = search.videos[0];
 
-        // 🎧 MP3 API (tumhari)
-        const apiUrl = `https://arslan-apis.vercel.app/download/ytmp3?url=${video.url}`;
+        // 🎧 INFO BOX (ANAYAT STYLE)
+        await conn.sendMessage(from, {
+            image: { url: video.thumbnail },
+            caption: `
+> *𝙰𝙽𝙰𝚈𝙰𝚃 𝙷𝙰𝙲𝙺𝙴𝚁 🇵🇰*
+╭───────────────────
+│ 🎧 *SONG FOUND*
+│
+│ 🎵 *Title:* ${video.title}
+│ ⏱️ *Duration:* ${video.timestamp}
+│ 👁️ *Views:* ${video.views}
+│
+│ ⏳ *Converting to MP3...*
+╰───────────────────
+- > *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*
+`
+        }, { quoted: mek });
+
+        // 🎼 API (same jo tum use kar rahe ho)
+        const apiUrl = `https://arslan-apis.vercel.app/download/ytmp3?url=${encodeURIComponent(video.url)}`;
         const res = await axios.get(apiUrl, { timeout: 60000 });
 
         if (
             !res.data ||
-            !res.data.status ||
+            res.data.status !== true ||
             !res.data.result ||
             !res.data.result.download ||
             !res.data.result.download.url
         ) {
-            return reply("❌ Audio generate nahi ho saka");
+            return reply(
+                "❌ Song download / convert error, thori dair baad try karo"
+            );
         }
 
-        const dlUrl = res.data.result.download.url;
-        const meta = res.data.result.metadata;
-        const quality = res.data.result.download.quality || "128kbps";
+        const audioUrl = res.data.result.download.url;
 
-        // 🎵 SEND AUDIO (DIRECT STREAM – SAFE)
+        // 📁 temp folder
+        const tempDir = path.join(__dirname, '../temp');
+        if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir, { recursive: true });
+        }
+
+        const inputPath = path.join(tempDir, `input_${Date.now()}.mp3`);
+        const outputPath = path.join(tempDir, `output_${Date.now()}.mp3`);
+
+        // 📥 download audio
+        const audioData = await axios.get(audioUrl, {
+            responseType: 'arraybuffer'
+        });
+        fs.writeFileSync(inputPath, audioData.data);
+
+        // 🔥 FFMPEG FIX (WHATSAPP COMPATIBLE)
+        await new Promise((resolve, reject) => {
+            ffmpeg(inputPath)
+                .audioCodec('libmp3lame')
+                .audioBitrate('128k')
+                .audioChannels(2)
+                .audioFrequency(44100)
+                .format('mp3')
+                .on('end', resolve)
+                .on('error', reject)
+                .save(outputPath);
+        });
+
+        // 🎵 SEND AUDIO
         await conn.sendMessage(from, {
-            audio: { url: dlUrl },
+            audio: fs.readFileSync(outputPath),
             mimetype: "audio/mpeg",
-            ptt: false,
-            fileName: `${meta.title}.mp3`,
-            caption:
-                `🎵 *${meta.title}*\n` +
-                `🎚️ Quality: ${quality}\n\n` +
-                `> © Arslan-MD`,
-            contextInfo: {
-                externalAdReply: {
-                    title: meta.title.length > 40
-                        ? meta.title.substring(0, 40) + "..."
-                        : meta.title,
-                    body: "YouTube MP3",
-                    thumbnailUrl: meta.thumbnail,
-                    sourceUrl: video.url,
-                    mediaType: 1,
-                    renderLargerThumbnail: true
-                }
-            }
+            fileName: `${video.title}.mp3`,
+            caption: `
+🎶 *${video.title}*
+
+> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*
+`
         }, { quoted: mek });
 
-        await conn.sendMessage(from, { react: { text: "✅", key: m.key } });
+        // 🧹 cleanup
+        fs.unlinkSync(inputPath);
+        fs.unlinkSync(outputPath);
+
+        // ✅ react
+        await conn.sendMessage(from, {
+            react: { text: "✅", key: m.key }
+        });
 
     } catch (err) {
         console.error("PLAY ERROR:", err);
-        reply("❌ Bhai error aa gaya, thori der baad try karo");
-        await conn.sendMessage(from, { react: { text: "❌", key: m.key } });
+        reply(
+            "❌ Song download / convert error, thori dair baad try karo"
+        );
+        await conn.sendMessage(from, {
+            react: { text: "❌", key: m.key }
+        });
     }
 });
