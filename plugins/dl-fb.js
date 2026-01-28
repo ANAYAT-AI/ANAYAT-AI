@@ -1,41 +1,77 @@
 const axios = require("axios");
 const { cmd } = require("../command");
 
+// FAIZAN-MD styled titles
+const fbTitles = [
+  "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ 📥 *Facebook Video Download*\n│ ✅ *Download Successful*\n└─────────────\n\n> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*",
+  "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ 📥 *Facebook Video Download*\n│ 🎬 *HD Video Ready*\n└─────────────\n\n> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*",
+  "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ 📥 *Facebook Video Download*\n│ ⚡ *Fast Download*\n└─────────────\n\n> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*",
+  "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ 📥 *Facebook Video Download*\n│ 🚀 *Completed*\n└─────────────\n\n> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*"
+];
+
+let fbTitleIndex = 0;
+
 cmd({
   pattern: "fb",
-  alias: ["facebook", "fbdl"],
+  alias: ["facebook", "fbvideo"],
+  react: "📥",
   desc: "Download Facebook videos",
   category: "download",
-  filename: __filename,
-  use: "<Facebook URL>",
-}, async (conn, m, store, { from, args, q, reply }) => {
+  use: ".fb <facebook url>",
+  filename: __filename
+}, async (conn, mek, m, { from, reply, args }) => {
   try {
-    // Check if a URL is provided
-    if (!q || !q.startsWith("http")) {
-      return reply("*`Need a valid Facebook URL`*\n\nExample: `.fb https://www.facebook.com/...`");
+    const fbUrl = args[0];
+
+    if (!fbUrl || !fbUrl.includes("facebook.com")) {
+      return reply(
+        "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ ❌ *Invalid Facebook URL*\n│ Example:\n│ .fb https://facebook.com/...\n└─────────────"
+      );
     }
 
-    // Add a loading react
-    await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
+    await conn.sendMessage(from, { react: { text: "⏳", key: m.key } });
 
-    // Fetch video URL from the API
-    const apiUrl = `https://api-aswin-sparky.koyeb.app/api/downloader/fbdl?url=${encodeURIComponent(q)}`;
-    const { data } = await axios.get(apiUrl);
+    await conn.sendMessage(from, {
+      text:
+        "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ 🔍 *Processing Link...*\n│ 📥 *Fetching Video*\n└─────────────"
+    }, { quoted: mek });
 
-    // Check if the API response is valid
-    if (!data.status || !data.data || !data.data.url) {
-      return reply("❌ Failed to fetch the video. Please try another link.");
+    const apiUrl = `https://edith-apis.vercel.app/download/facebook?url=${encodeURIComponent(fbUrl)}`;
+    const { data } = await axios.get(apiUrl, { timeout: 20000 });
+
+    if (!data || data.status !== true) {
+      return reply(
+        "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ ❌ *Download Failed*\n│ Facebook may be blocking this video\n└─────────────"
+      );
     }
 
-    // Send the video to the user
-    const videoUrl = data.data.url;
+    const media = data?.result?.media || {};
+    const videoUrl =
+      media.video_hd ||
+      media.video_sd ||
+      media.video ||
+      null;
+
+    if (!videoUrl) {
+      return reply(
+        "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ ⚠️ *Video URL not found*\n│ Reel may be private or restricted\n└─────────────"
+      );
+    }
+
+    const caption = fbTitles[fbTitleIndex];
+    fbTitleIndex = (fbTitleIndex + 1) % fbTitles.length;
+
     await conn.sendMessage(from, {
       video: { url: videoUrl },
-      caption: "📥 *Facebook Video Downloaded*\n\n- *© 𝙿𝙾𝚆𝙴𝚁𝙴𝙳 𝙱𝚈 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸 ❣️*",
-    }, { quoted: m });
+      caption
+    }, { quoted: mek });
 
-  } catch (error) {
-    console.error("Error:", error); // Log the error for debugging
-    reply("❌ Error fetching the video. Please try again.");
+    await conn.sendMessage(from, { react: { text: "✅", key: m.key } });
+
+  } catch (err) {
+    console.error("ANAYAT-AI FB ERROR:", err);
+    reply(
+      "┌─⭓ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸* ⭓\n│\n│ ❌ *Facebook Download Failed*\n│ Try another video\n└─────────────"
+    );
   }
 });
