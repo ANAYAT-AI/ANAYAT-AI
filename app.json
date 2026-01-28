@@ -1,6 +1,6 @@
 {
   "name": "ANAYAT-AI",
-  "description": "Javascript WhatsApp bot made by 𝘼𝙉𝘼𝙔𝘼𝙏-𝙆𝙃𝘼𝙉",
+  "description": "Javascript WhatsApp bot made by 𝙰𝙽𝙰𝚈𝙰𝚃-𝙷𝙰𝙲𝙺𝙴𝚁",
   "logo": "https://files.catbox.moe/adhn5v.jpg",
   "keywords": ["ANAYAT-AI"],
   "success_url": "/",
@@ -85,13 +85,13 @@
     "OWNER_NAME": {
       "description": "Type Bot Owner Name.",
       "required": false,
-      "value": "*ANAYAT KING*"
+      "value": "𝙰𝙽𝙰𝚈𝙰𝚃-𝙷𝙰𝙲𝙺𝙴𝚁"
 }, 
 
     "OWNER_NUMBER": {
       "description": "put the owner number for bot.",
       "required": false,
-      "value": "923452401"
+      "value": "92345"
 
     }, 
 
@@ -137,7 +137,7 @@
      "DESCRIPTION": {
       "description": "add caption for menu and other",
       "required": false,
-      "value": "*© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝘼𝙉𝘼𝙔𝘼𝙏-𝙆𝙃𝘼𝙉 ❣️*"
+      "value": "*© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*"
     },
 
       "DELETE_LINKS": {
