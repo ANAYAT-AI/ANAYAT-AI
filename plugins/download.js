@@ -7,8 +7,8 @@ const axios = require("axios");
 const { cmd, commands } = require('../command');
 
 cmd({
-  pattern: "ig",
-  alias: ["insta", "Instagram"],
+  pattern: "ig7",
+  alias: ["insta8", "Instagram9"],
   desc: "To download Instagram videos.",
   react: "🎥",
   category: "download",
@@ -23,7 +23,7 @@ cmd({
       react: { text: "⏳", key: m.key }
     });
 
-    const response = await axios.get(`https://jawad-tech.vercel.app/downloader?url=${q}`);
+    const response = await axios.get(`https://insta-down.apis-bj-devs.workers.dev/?url=${q}`);
     const data = response.data;
 
     if (!data || data.status !== 200 || !data.downloadUrl) {
@@ -254,7 +254,7 @@ cmd({
 ┃ 📅 *Updated On:* ${app.updated}
 ┃ 👨‍💻 *Developer:* ${app.developer.name}
 ╰━━━━━━━━━━━━━━━┈⊷
-🔗 *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝚊𝚗𝚊𝚢𝚊𝚝-𝚊𝚒 ❣️*`;
+> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*`;
 
     await conn.sendMessage(from, { react: { text: "⬆️", key: m.key } });
 
@@ -305,7 +305,7 @@ cmd({
         document: { url: downloadUrl },
         mimetype: response.data.result.mimetype,
         fileName: response.data.result.fileName,
-        caption: "*© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝚊𝚗𝚊𝚢𝚊𝚝-𝚊𝚒 ❣️*"
+        caption: "> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*"
       }, { quoted: m });
 
       await conn.sendMessage(from, { react: { text: "✅", key: m.key } });
@@ -317,3 +317,4 @@ cmd({
     reply("❌ An error occurred while fetching the Google Drive file. Please try again.");
   }
 }); 
+        
