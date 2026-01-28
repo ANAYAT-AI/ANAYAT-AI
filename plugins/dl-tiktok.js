@@ -1,60 +1,46 @@
-const fetch = require("node-fetch");
-const { cmd } = require("../command");
+const { cmd } = require('../command');
+const axios = require('axios');
+const config = require('../config');
 
 cmd({
-  pattern: "tiktoksearch",
-  alias: ["tiktoks", "tiks"],
-  desc: "Search for TikTok videos using a query.",
-  react: '✅',
-  category: 'tools',
-  filename: __filename
-}, async (conn, m, store, {
-  from,
-  args,
-  reply
-}) => {
-  if (!args[0]) {
-    return reply("🌸 What do you want to search on TikTok?\n\n*Usage Example:*\n.tiktoksearch <query>");
-  }
+    pattern: "tt",
+    alias: ["tiktok", "ttdl"],
+    react: "🎵",
+    desc: "Download TikTok video without watermark",
+    category: "download",
+    use: ".tt <tiktok url>",
+    filename: __filename
+}, async (conn, mek, m, { from, q, reply }) => {
+    try {
+        if (!q || !q.includes("tiktok")) {
+            return reply("❌ TikTok link do\nExample:\n.tt https://vm.tiktok.com/xxxx");
+        }
 
-  const query = args.join(" ");
-  await store.react('⌛');
+        await reply("⏳ *𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸 downloading TikTok...*");
 
-  try {
-    reply(`🔎 Searching TikTok for: *${query}*`);
-    
-    const response = await fetch(`https://apis-starlights-team.koyeb.app/starlight/tiktoksearch?text=${encodeURIComponent(query)}`);
-    const data = await response.json();
+        const apiUrl = `https://arslanmd-api.vercel.app/api/ttdl?url=${encodeURIComponent(q)}`;
+        const { data } = await axios.get(apiUrl);
 
-    if (!data || !data.data || data.data.length === 0) {
-      await store.react('❌');
-      return reply("❌ No results found for your query. Please try with a different keyword.");
-    }
+        if (!data.status || !data.result?.video) {
+            return reply("❌ TikTok download failed\nLink private ya expired ho sakta hai.");
+        }
 
-    // Get up to 7 random results
-    const results = data.data.slice(0, 7).sort(() => Math.random() - 0.5);
+        const caption = `
+🎵 *TikTok Downloaded*
+👤 Author: ${data.result.author || "Unknown"}
 
-    for (const video of results) {
-      const message = `🌸 *TikTok Video Result*:\n\n`
-        + `*• Title*: ${video.title}\n`
-        + `*• Author*: ${video.author || 'Unknown'}\n`
-        + `*• Duration*: ${video.duration || "Unknown"}\n`
-        + `*• URL*: ${video.link}\n\n`;
+> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*
+        `.trim();
 
-      if (video.nowm) {
         await conn.sendMessage(from, {
-          video: { url: video.nowm },
-          caption: message
-        }, { quoted: m });
-      } else {
-        reply(`❌ Failed to retrieve video for *"${video.title}"*.`);
-      }
-    }
+            video: { url: data.result.video },
+            caption: caption,
+            mimetype: "video/mp4"
+        }, { quoted: mek });
 
-    await store.react('✅');
-  } catch (error) {
-    console.error("Error in TikTokSearch command:", error);
-    await store.react('❌');
-    reply("❌ An error occurred while searching TikTok. Please try again later.");
-  }
+    } catch (e) {
+        console.error("TikTok Error:", e);
+        reply("❌ Error while downloading TikTok");
+    }
 });
+  
