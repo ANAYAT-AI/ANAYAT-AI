@@ -13,7 +13,7 @@ cmd({
   try {
     if (!q) return reply("❌ Spotify track ka link do bhai!");
 
-    const apiUrl = `https://arslan-apis.vercel.app/download/spotify?url=${encodeURIComponent(q)}`;
+    const apiUrl = `https://arslan-apis.vercel.app/download/spotidl?q=${encodeURIComponent(q)}`;
     const { data } = await axios.get(apiUrl);
 
     if (!data?.status || !data?.download) {
