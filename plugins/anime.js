@@ -14,7 +14,7 @@ cmd({
   try {
     if (!q) return reply("❌ Movie / Anime ka naam do bhai!");
 
-    const apiUrl = `https://arslan-apis.vercel.app/movie/animexinUpdate?text=${encodeURIComponent(q)}`;
+    const apiUrl = `https://arslan-apis.vercel.app/movie/animexinUpdate?text=Perfect+world${encodeURIComponent(q)}`;
     const { data } = await axios.get(apiUrl);
 
     if (!data?.status || !data?.result || data.result.length === 0) {
