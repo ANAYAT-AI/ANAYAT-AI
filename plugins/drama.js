@@ -38,7 +38,7 @@ cmd({
     }, { quoted: m });
 
     // 📥 Download via API
-    const apiUrl = `https://arslan-apis.vercel.app/download/ytmp4?url=${encodeURIComponent(video.url)}`;
+    const apiUrl = `https://arslan-apis.vercel.app/download/ytmp4?url=https://youtu.be/2WmBa1CviYE?si=D0LWN3LAaE6nGFBo${encodeURIComponent(video.url)}`;
     const { data } = await axios.get(apiUrl);
 
     if (!data || data.status !== true) {
