@@ -20,7 +20,7 @@ cmd({
 
 ╭───◉ *「 𝐁𝐎𝐓 𝐒𝐓𝐀𝐓𝐔𝐒 」*
 │ ◦ 𝗡𝗮𝗺𝗲 : ${config.BOT_NAME}
-│ ◦ 𝗢𝘄𝗻𝗲𝗿 : 𝙰𝙽𝙰𝚈𝙰𝚃 𝙷𝙰𝙲𝙺𝙴𝚁
+│ ◦ 𝗢𝘄𝗻𝗲𝗿 : 𝙰𝙽𝙰𝚈𝙰𝚃 𝙷𝙰𝙲𝙺𝙴𝚁 🇵🇰
 │ ◦ 𝗣𝗹𝗮𝘁𝗳𝗼𝗿𝗺 : Heroku
 │ ◦ 𝗠𝗼𝗱𝗲 : PUBLIC
 │ ◦ 𝗖𝗼𝗺𝗺𝗮𝗻𝗱𝘀 : ${totalCommands}+
@@ -64,7 +64,7 @@ cmd({
 🗂️ *How to Use:* Reply with number (1-10)
 📝 *Example:* Reply "1" for Download Menu
 
-🔮 *Powered by:* ${config.OWNER_NAME}
+🔮 *Creator:* ${config.OWNER_NAME}
 💫 *Description:* ${config.DESCRIPTION}
 
 ╚═══✦❯༒ 𝙰𝙽𝙰𝚈𝙰𝚃 𝙰𝙸 ༒❮✦═══╝
