@@ -13,9 +13,9 @@ async (conn, mek, m, { from, sender, reply }) => {
     try {
         // Owner information (you can modify these values)
         const ownerInfo = {
-            name: "ANAYAT HACKER 🇵🇰",
+            name: "𝙰𝙽𝙰𝚈𝙰𝚃 𝙷𝙰𝙲𝙺𝙴𝚁 🇵🇰",
             number: "+923452401207",
-            photo: "https://files.catbox.moe/s8lbne.jpg",
+            photo: "https://files.catbox.moe/e65lv9.jpg",
             bio: "The creator of this amazing bot"
         };
 
@@ -28,7 +28,7 @@ async (conn, mek, m, { from, sender, reply }) => {
 │ *📝 Bio:* ${ownerInfo.bio}
 │
 │ *🤖 Bot Name:* ${config.BOT_NAME}
-│ *⚡ Version:* ${config.VERSION || "4.0.0"}
+│ *⚡ Version:* ${config.VERSION || "5.0.0"}
 │
 ╰─────────────────────
 
@@ -48,7 +48,7 @@ async (conn, mek, m, { from, sender, reply }) => {
     } catch (e) {
         console.error("Creator Command Error:", e);
         // Fallback text if image fails
-        await reply(`👑 *Creator Info*\n\nName: 𝐀𝐍𝐀𝐘𝐀𝐓-𝐀𝐈\nNumber: +923452401207\n\nContact for bot support!`);
+        await reply(`👑 *Creator Info*\n\nName: 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸\nNumber: +923452401207\n\nContact for bot support!`);
     }
 });
 
