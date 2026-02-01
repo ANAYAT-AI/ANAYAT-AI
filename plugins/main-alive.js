@@ -28,8 +28,9 @@ async (conn, mek, m, { from, sender, reply }) => {
 > ${config.DESCRIPTION}`;
 
         await conn.sendMessage(from, {
-            image: { url: config.MENU_IMAGE_URL },
+            video: { url: "https://files.catbox.moe/2myos8.mp4" },
             caption: status,
+            gifPlayback: true, // video ko gif style auto play karega
             contextInfo: {
                 mentionedJid: [m.sender],
                 forwardingScore: 1000,
