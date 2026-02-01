@@ -5,7 +5,7 @@ const { cmd } = require("../command");
 cmd({
   pattern: "drama",
   alias: ["ytdrama", "darama"],
-  react: "🎭",
+  react: "📽️",
   desc: "Search YouTube & download video",
   category: "download",
   use: ".drama <search text>",
