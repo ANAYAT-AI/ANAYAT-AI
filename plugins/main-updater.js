@@ -12,20 +12,20 @@ cmd({
 async (conn, mek, m, { from, reply, isCreator }) => {
     try {
         if (!isCreator) {
-            return reply("> *📛 𝙾𝙽𝙻𝚈 𝚃𝙷𝙴 𝙱𝙾𝚃 𝙾𝚆𝙽𝙴𝚁 𝙲𝙰𝙽 𝚄𝚂𝙴 𝚃𝙷𝙸𝚂 𝙲𝙾𝙼𝙼𝙰𝙽𝙳?*");
+            return reply("*📛 тнιs ιs αη σωηεя-σηℓү cσммαη∂!*");
         }
 
         // Initial message
         const updateMsg = await conn.sendMessage(from, {
-            text: 'ιηιтιαтιηg sүsтεм υρ∂αт�?...🚀'
+            text: 'ιηιтιαтιηg sүsтεм υρ∂αтε...🚀'
         }, { quoted: mek });
 
         // Update steps with emojis
         const updateSteps = [
             "*🔍 cнєcкιηg sүsтєм sтαтυs...*",
-            "*🛠�? ρяєραʀιηg υρ∂αт�? cσмρσηєηтs...*",
+            "*🛠️ ρяєραʀιηg υρ∂αтє cσмρσηєηтs...*",
             "*📦 ғιηαℓιzιηg ραcкαgєs...*",
-            "*�? σρтιмιzιηg ρєʀғσʀмαηcε...*",
+            "*⚡ σρтιмιzιηg ρєʀғσʀмαηcε...*",
             "*🔃 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸 ʀєѕτατ...*",
             "*♻️ ʀєѕτατιηg sεʀvιcεs...*"
         ];
@@ -50,7 +50,7 @@ async (conn, mek, m, { from, reply, isCreator }) => {
 
         // Final message before restart
         await conn.sendMessage(from, {
-            text: '- *�? ANAYAT-AI υρ∂αт�? cσмρℓєтє∂ ʀєѕτατιηg*'
+            text: '- *✅ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸 υρ∂αтє cσмρℓєтє∂ ʀєѕτατιηg*'
         }, { quoted: mek });
 
         // Execute restart after a short delay
@@ -60,7 +60,7 @@ async (conn, mek, m, { from, reply, isCreator }) => {
     } catch (e) {
         console.error(e);
         await conn.sendMessage(from, {
-            text: `*�? Update Failed!*\n_Error:_ ${e.message}\n\n*Try manually:*\n\`\`\`pm2 restart all\`\`\``
+            text: `*❌ Update Failed!*\n_Error:_ ${e.message}\n\n*Try manually:*\n\`\`\`pm2 restart all\`\`\``
         }, { quoted: mek });
     }
 });
