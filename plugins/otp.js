@@ -1,56 +1,103 @@
+// =======================
+// AUTO API CHECK & FORWARD
+// Ultra Pro Max
+// © Powered By ANAYAT-AI
+// =======================
+
+const { cmd } = require('../command')
 const axios = require('axios')
 
-const CHANNEL_ID = "120363420933039839@newsletter"
-const API_URL = "https://arslan-apis.vercel.app/more/liveotp"
+// ✅ Owner Numbers
+const OWNERS = [
+    "923452401207",
+    "923498011451",
+    "923392616263",
+    "923237045919"
+]
 
-let lastIDs = new Set()
+function isOwner(sender){
+    return OWNERS.includes(sender.split("@")[0])
+}
 
-module.exports = async (conn) => {
+// 🔁 Storage last data
+let lastData = null
+let autoRunning = false
+let forwardJid = null
 
-    console.log("✅ Live OTP Auto Forward Started")
+// =======================
+// START AUTO CHECK
+// =======================
+cmd({
+    pattern: "autostart",
+    desc: "Start Auto API Check (Owner Only)",
+    category: "owner",
+    react: "▶️",
+    filename: __filename
+},
+async (conn, mek, m, { sender, reply, args }) => {
+
+    if (!isOwner(sender)) return reply("❌ Owner Only")
+
+    if (!args[0]) return reply("⚠️ Give Group/Channel JID")
+
+    forwardJid = args[0]
+
+    if (autoRunning) return reply("⚠️ Already Running")
+
+    autoRunning = true
+    reply("✅ Auto Check Started (3s Interval)")
 
     setInterval(async () => {
+
+        if (!autoRunning) return
+
         try {
 
-            const res = await axios.get(API_URL)
+            // 👉 Replace with your SAFE API
+            const res = await axios.get("https://arslan-apis.vercel.app/more/liveotp")
 
-            if (!res.data || !res.data.status) return
+            if (!res.data?.result) return
 
-            const data = res.data.result
+            let newData = JSON.stringify(res.data.result)
 
-            for (let item of data) {
+            if (newData !== lastData) {
 
-                // Unique ID banane ke liye
-                const uniqueID = item.number + item.received_at
+                lastData = newData
 
-                // Duplicate message rokne ke liye
-                if (lastIDs.has(uniqueID)) continue
-                lastIDs.add(uniqueID)
+                let text = "📡 New API Update Detected\n\n"
 
-                // Stylish Message
-                let msg = `
-╔════〔 LIVE OTP ALERT 〕════╗
+                res.data.result.slice(0,5).forEach((d,i)=>{
+                    text += `🔹 ${i+1}. ${d.number || "Data"}\n`
+                })
 
-📡 Service: ${item.service}
-⏰ Time: ${item.received_at}
-🔒 OTP: Hidden
+                text += "\n> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸-𝙰𝚁𝚂𝙻𝙰𝙽-𝙼𝙳*"
 
-╚════════════════════╝
-> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙰𝙽𝙰𝚈𝙰𝚃-𝙰𝙸*
-`
-
-                await conn.sendMessage(CHANNEL_ID, { text: msg })
+                await conn.sendMessage(forwardJid,{ text })
 
             }
 
-            // Memory clean rakhne ke liye
-            if (lastIDs.size > 50) {
-                lastIDs.clear()
-            }
-
-        } catch (err) {
-            console.log("AUTO OTP ERROR:", err.message)
+        } catch(err){
+            console.log("AUTO CHECK ERROR:", err.message)
         }
 
-    }, 60000) // 1 minute interval
-}
+    }, 3000) // 3 seconds
+})
+
+
+// =======================
+// STOP AUTO CHECK
+// =======================
+cmd({
+    pattern: "autostop",
+    desc: "Stop Auto Check",
+    category: "owner",
+    react: "⏹️",
+    filename: __filename
+},
+async (conn, mek, m, { sender, reply }) => {
+
+    if (!isOwner(sender)) return reply("❌ Owner Only")
+
+    autoRunning = false
+    reply("🛑 Auto Check Stopped")
+})
