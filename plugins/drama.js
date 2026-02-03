@@ -38,7 +38,7 @@ cmd({
     }, { quoted: m });
 
     // 📥 Download via API
-    const apiUrl = `https://arslan-apis.vercel.app/download/ytmp4?url=https://youtu.be/2WmBa1CviYE?si=D0LWN3LAaE6nGFBo${encodeURIComponent(video.url)}`;
+    const apiUrl = `https://api.princetechn.com/api/download/ytmp4?apikey=prince&url=https%3A%2F%2Fyoutu.be%2FwdJrTQJh1ZQ%3Ffeature%3Dshared${encodeURIComponent(video.url)}`;
     const { data } = await axios.get(apiUrl);
 
     if (!data || data.status !== true) {
